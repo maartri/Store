@@ -26,3 +26,24 @@ BEGIN
 	 FOREIGN KEY (OrderId) REFERENCES [Order](Id)
 	)
 END
+
+IF NOT EXISTS(select 1 from sys.all_objects  where  name = (N'Roles'))
+BEGIN
+	CREATE TABLE [Roles] (
+	 Id INT PRIMARY KEY IDENTITY(1,1),
+	 Rolename VARCHAR(20),
+	)
+END
+
+IF NOT EXISTS(select 1 from sys.all_objects  where  name = (N'User'))
+BEGIN
+	CREATE TABLE [User] (
+	 Id INT PRIMARY KEY IDENTITY(1,1),
+	 Username VARCHAR(50),
+	 [Password] VARCHAR(20),
+	 RoleId INT,
+	 FOREIGN KEY (RoleID) REFERENCES [Roles](Id),
+	)
+END
+
+
