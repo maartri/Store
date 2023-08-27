@@ -27,10 +27,16 @@ BEGIN
 	)
 END
 
+IF EXISTS (select columnproperty(object_id('Role'),'Id','IsIdentity'))
+BEGIN
+	DROP TABLE [User];
+	DROP TABLE Roles;
+END
+
 IF NOT EXISTS(select 1 from sys.all_objects  where  name = (N'Roles'))
 BEGIN
 	CREATE TABLE [Roles] (
-	 Id INT PRIMARY KEY IDENTITY(1,1),
+	 Id INT PRIMARY KEY,
 	 Rolename VARCHAR(20),
 	)
 END
@@ -45,5 +51,4 @@ BEGIN
 	 FOREIGN KEY (RoleID) REFERENCES [Roles](Id),
 	)
 END
-
 
