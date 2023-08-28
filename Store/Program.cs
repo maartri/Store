@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -11,6 +11,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DatabaseContext>(x => x.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection")));
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:4200");
+                      });
+});
+
 
 var app = builder.Build();
 
@@ -23,7 +33,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthorization();
+
 
 app.MapControllers();
 
